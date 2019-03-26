@@ -4,8 +4,7 @@ To install all packages run
 ###
 `npm i`
 
-##
-To set up project: 
+## To set up project: 
 
 Configure database credentials in config/config.json
 
