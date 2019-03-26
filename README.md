@@ -11,8 +11,7 @@ Configure database credentials in config/config.json
 Run database
 
 Run migration
-###
-`npx sequelize db:migrate`
+### `npx sequelize db:migrate`
 
 Run project via
 ###
