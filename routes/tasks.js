@@ -1,7 +1,61 @@
 const express = require('express');
 const router = express.Router();
 
-const Task = require('../models/Task');
+const Task = require('../models/index').Task;
+
+// Get all
+router.get('/', async (req, res, next) => {
+
+  try {
+    const tasks = await Task.findAll({
+      attributes: ['id', 'title', 'isFinished', 'isActive', 'createdAt'],
+      where: { isActive: true, isFinished: false },
+      order: [ ['createdAt', 'DESC'] ]
+    });
+    res.json({
+      result: 'OK',
+      data: tasks,
+      length: tasks.length,
+      message: 'Tareas obtenidas correctamente'
+    });
+  } catch (error) {
+    res.json({
+      result: 'ERROR',
+      data: [],
+      length: 0,
+      message: `Error al obtener las tareas. Error: ${error}`
+    });
+  }
+});
+
+// Get one
+router.get('/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const task = await Task.findByPk(+id);
+
+    if (task) {
+      res.json({
+        result: 'OK',
+        data: task,
+        message: 'Tarea obtenida correctamente'
+      });
+    } else {
+      res.json({
+        result: 'ERROR',
+        data: {},
+        message: 'Tarea no encontrada'
+      });
+    }
+  } catch (error) {
+    res.json({
+      result: 'ERROR',
+      data: {},
+      message: `Error al obtener la tarea. Error: ${error}`
+    });
+  }
+});
 
 // Insert
 router.post('/', async (req, res) => {
@@ -12,7 +66,8 @@ router.post('/', async (req, res) => {
       {
         title,
         isFinished: false,
-        isActive: true
+        isActive: true,
+        // createdAt: new Date().toDateString()
       },
       {
         fields: ['title', 'isFinished', 'isActive']
@@ -103,60 +158,6 @@ router.delete('/:id', async (req, res) => {
       result: 'ERROR',
       data: {},
       message: `Error al eliminar tarea. Error: ${error}`
-    });
-  }
-});
-
-// Get all
-router.get('/', async (req, res, next) => {
-
-  try {
-    const tasks = await Task.findAll({
-      attributes: ['id', 'title', 'isFinished', 'isActive', 'createdAt'],
-      where: { isActive: true, isFinished: false },
-      order: [ ['createdAt', 'DESC'] ]
-    });
-    res.json({
-      result: 'OK',
-      data: tasks,
-      length: tasks.length,
-      message: 'Tareas obtenidas correctamente'
-    });
-  } catch (error) {
-    res.json({
-      result: 'ERROR',
-      data: [],
-      length: 0,
-      message: `Error al obtener las tareas. Error: ${error}`
-    });
-  }
-});
-
-// Get one
-router.get('/:id', async (req, res) => {
-  const { id } = req.params;
-
-  try {
-    const task = await Task.findByPk(+id);
-
-    if (task) {
-      res.json({
-        result: 'OK',
-        data: task,
-        message: 'Tarea obtenida correctamente'
-      });
-    } else {
-      res.json({
-        result: 'ERROR',
-        data: {},
-        message: 'Tarea no encontrada'
-      });
-    }
-  } catch (error) {
-    res.json({
-      result: 'ERROR',
-      data: {},
-      message: `Error al obtener la tarea. Error: ${error}`
     });
   }
 });
