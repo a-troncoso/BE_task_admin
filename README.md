@@ -15,4 +15,4 @@ Run migration
 `npx sequelize db:migrate`
 
 Run project via
-##`npm start`
+## `npm start`
