@@ -108,10 +108,13 @@ router.delete('/:id', async (req, res) => {
 });
 
 // Get all
-router.get('/', async (req, res) => {
+router.get('/', async (req, res, next) => {
+
   try {
     const tasks = await Task.findAll({
-      attributes: ['id', 'title', 'isFinished', 'isActive', 'createdAt']
+      attributes: ['id', 'title', 'isFinished', 'isActive', 'createdAt'],
+      where: { isActive: true, isFinished: false },
+      order: [ ['createdAt', 'DESC'] ]
     });
     res.json({
       result: 'OK',
