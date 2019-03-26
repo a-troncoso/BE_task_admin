@@ -4,7 +4,7 @@ To set up project:
 
 Configure database credentials in config/config.json
 
-Set up database
+Run database
 
 Run migration via: npx sequelize db:migrate
 
